@@ -1,0 +1,10 @@
+using MediatR;
+
+namespace MyProject.Application.Commands
+{
+    public class Create { Name }
+    Command : IRequest<Guid>
+    {
+        public string Name { get; set; }
+}
+}

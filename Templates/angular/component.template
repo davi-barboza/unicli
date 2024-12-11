@@ -1,0 +1,10 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-{Name}',
+  templateUrl: './{Name}.component.html',
+  styleUrls: ['./{Name}.component.css']
+})
+export class {Name}Component {
+  constructor() {}
+}
