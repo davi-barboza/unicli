@@ -1,0 +1,11 @@
+﻿using {namespace}.Features;
+using {namespace}.Dtos;
+
+namespace {namespace}.Queries;
+
+public record Get{name}ByIdQuery(
+    Guid Id
+    ) : ICommandQuery<{name}Dto>;
+
+public record GetAll{name}Query(
+    ) : ICommandQuery<IReadOnlyList<{name}Dto>>;

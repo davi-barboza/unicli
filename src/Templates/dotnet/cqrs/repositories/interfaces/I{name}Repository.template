@@ -1,0 +1,8 @@
+﻿using {namespace}.Interfaces;
+using {namespace}.Entities;
+
+namespace {namespace}.Interfaces;
+
+public interface I{name}Repository : IRepository<{name}Entity>
+{
+}

@@ -1,0 +1,14 @@
+﻿using Microsoft.EntityFrameworkCore;
+using {namespace}.Interfaces;
+using {namespace}.Implementations;
+using {namespace}.Interfaces;
+using {namespace}.Entities;
+
+namespace {namespace}.Implementations;
+
+public class {name}Repository(
+    DBContext dbContext,
+    ICurrentUser currentUser
+    ) : Repository<{name}>(dbContext, currentUser), I{name}Repository
+{
+}

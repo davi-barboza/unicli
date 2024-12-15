@@ -1,0 +1,14 @@
+namespace {namespace}.Commands;
+
+public record Create{name}Command(
+    string Description,
+    ) : ICommandQuery;
+
+public record Update{name}Command(
+    int Id,
+    string Description,
+    ) : ICommandQuery;
+
+public record Delete{name}Command(
+    Guid Id
+    ) : ICommandQuery;
