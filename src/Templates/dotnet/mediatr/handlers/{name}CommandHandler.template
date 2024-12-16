@@ -1,0 +1,45 @@
+namespace {project}.Handlers;
+
+public class {name}CommandHandler(IUnitOfWork unitOfWork) : 
+    ICommandQueryHandler<Create{name}Command>,
+    ICommandQueryHandler<Update{name}Command>,
+    ICommandQueryHandler<Delete{name}Command>
+{
+    public async Task<Result> Handle(Create{name}Command request, CancellationToken cancellationToken)
+    {
+        var entity = request.ToEntity(); // Mapper
+        await unitOfWork.{name}Repository.AddAsync(entity, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        var result = new Result(); // Custom result
+        result.OK();
+        return result;
+    }
+   
+    public async Task<Result> Handle(Update{name}Command request, CancellationToken cancellationToken)
+    {
+        var existEntity = await unitOfWork.{name}Repository.GetByIdAsync(request.Id, cancellationToken)
+            ?? throw new Exception("NotFound");
+
+        var entity = request.ToEntity(existEntity); // Mapper
+        await unitOfWork.{name}Repository.UpdateAsync(entity, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        var result = new Result(); // Custom result
+        result.OK();
+        return result;
+    }
+
+    public async Task<Result> Handle(Delete{name}Command request, CancellationToken cancellationToken)
+    {
+        var existEntity = await unitOfWork.{name}Repository.GetByIdAsync(request.Id, cancellationToken)
+            ?? throw new Exception("Not found");
+
+        await unitOfWork.{name}Repository.DeleteAsync(existEntity, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+
+        var result = new Result(); // Custom result
+        result.OK();
+        return result;
+    }
+}

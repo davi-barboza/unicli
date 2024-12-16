@@ -1,0 +1,20 @@
+﻿using Microsoft.EntityFrameworkCore;
+using {project}.Interfaces;
+using {project}.Entities;
+
+namespace {project}.Implementations;
+
+public class ReadOnlyRepository<TEntity>(
+    DBContext dbContext
+    ) : RepositoryProperties<TEntity>(dbContext), IReadOnlyRepository<TEntity> where TEntity : Entity
+{
+    public async Task<TEntity?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await SetAsNoTracking.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await SetAsNoTracking.ToListAsync(cancellationToken);
+    }
+}

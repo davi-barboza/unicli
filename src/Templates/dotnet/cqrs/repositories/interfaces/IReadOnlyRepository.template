@@ -1,9 +1,0 @@
-﻿using {namespace}.Entities;
-
-namespace {namespace}.Interfaces;
-
-public interface IReadOnlyRepository<TEntity> where TEntity : Entity
-{
-    Task<TEntity?> GetByIdAsync(int id, CancellationToken cancellationToken = default);
-    Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
-}

@@ -1,0 +1,8 @@
+﻿using {project}.Entities;
+
+namespace {project}.Entities;
+
+public class {name}Entity : TrackableEntity
+{
+    public string Description { get; set; } = string.Empty;
+}

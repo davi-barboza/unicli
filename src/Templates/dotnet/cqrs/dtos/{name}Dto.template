@@ -1,8 +1,0 @@
-﻿using {namespace}.Dtos;
-
-namespace {namespace}.Dtos;
-
-public class {name}Dto : TrackableEntityDto
-{
-    public string Description { get; set; } = string.Empty;
-}

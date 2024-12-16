@@ -1,0 +1,8 @@
+﻿using {project}.Interfaces;
+
+namespace {project}.Interfaces;
+
+public interface I{project}UnitOfWork : IUnitOfWork
+{
+    public I{name}Repository {name}Repository { get; init; }
+}

@@ -1,0 +1,5 @@
+namespace {project}.Commands;
+
+public record Delete{name}Command(
+    Guid Id
+    ) : ICommandQuery;

@@ -1,0 +1,5 @@
+namespace {project}.Commands;
+
+public record Create{name}Command(
+    string Description,
+    ) : ICommandQuery;

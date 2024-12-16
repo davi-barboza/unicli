@@ -1,0 +1,6 @@
+namespace {project}.Commands;
+
+public record Update{name}Command(
+    Guid Id,
+    string Description,
+    ) : ICommandQuery;

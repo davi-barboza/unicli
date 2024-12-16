@@ -1,0 +1,8 @@
+﻿using {project}.Features;
+using {project}.Dtos;
+
+namespace {project}.Queries;
+
+public record Get{name}ByIdQuery(
+    Guid Id
+    ) : ICommandQuery<{name}Dto>;

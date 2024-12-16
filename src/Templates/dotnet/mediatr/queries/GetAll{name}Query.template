@@ -1,0 +1,7 @@
+﻿using {project}.Features;
+using {project}.Dtos;
+
+namespace {project}.Queries;
+
+public record GetAll{name}Query(
+    ) : ICommandQuery<IReadOnlyList<{name}Dto>>;

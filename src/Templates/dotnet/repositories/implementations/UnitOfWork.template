@@ -1,0 +1,11 @@
+﻿using {project}.Interfaces;
+
+namespace {project}.Implementations;
+
+public class UnitOfWork(DBContext dbContext) : IUnitOfWork
+{
+    public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return await dbContext.SaveChangesAsync(cancellationToken) > 0;
+    }
+}
