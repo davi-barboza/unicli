@@ -157,7 +157,7 @@ const buildOutputPath = (
   const replacedFileName =
     splitPath
       .at(-1)
-      ?.replace(/\{name\}/g, options.name)
+      ?.replace(/\{name\}/g, capitalizeFirstLetter(options.name))
       .replace(/\{project\}/g, options.project)
       .replace(/template/g, "cs") ?? "";
 

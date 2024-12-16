@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using {project}.Interfaces;
 using {project}.Implementations;
-using {project}.Interfaces;
 using {project}.Entities;
 
 namespace {project}.Implementations;
