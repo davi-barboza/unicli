@@ -1,0 +1,16 @@
+using {project}.Domain.Entities;
+using {project}.Domain.Interfaces.Repositories;
+
+namespace {project}.API.Graphql.Queries
+{
+    [QueryType]
+    public static class {name}Query
+    {
+        [UsePaging]
+        [UseSorting]
+        [UseFiltering]
+        public static Task<IReadOnlyList<{name}Model>> Get{name}(I{name}Repository repository,
+            CancellationToken cancellationToken = default!)
+            => repository.GetAllAsync(cancellationToken);
+    }
+}

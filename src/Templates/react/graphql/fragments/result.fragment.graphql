@@ -1,0 +1,9 @@
+fragment Result on Result{
+    errors
+    isSuccess
+    successes
+    validationErrors {
+        key
+        value
+    }
+}

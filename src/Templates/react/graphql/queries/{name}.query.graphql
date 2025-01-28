@@ -1,0 +1,7 @@
+query Get{name}s($where: {name}ModelFilterInput){
+    categories(where: $where){
+        nodes{
+            ...{name}
+        }
+    }
+}

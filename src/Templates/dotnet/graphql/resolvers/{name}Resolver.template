@@ -1,0 +1,13 @@
+using {project}.API.Graphql.Dataloaders;
+using {project}.Domain.Entities;
+
+namespace {project}.API.Graphql.Resolvers;
+
+public class {name}Resolver
+{
+    public async Task<{name}Model?> GetChildren([Parent] {name}Model {name}, ChildrenDataLoader dataLoader,
+        CancellationToken cancellationToken)
+    {
+        return await dataLoader.LoadAsync({name}.ChildrenId, cancellationToken);
+    }
+}

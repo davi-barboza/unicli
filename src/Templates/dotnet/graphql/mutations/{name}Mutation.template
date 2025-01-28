@@ -1,0 +1,18 @@
+using BuildingBlocks.Application.Features;
+using {project}.Domain.Commands.{name};
+using MediatR;
+
+namespace {project}.API.Graphql.Mutations
+{
+    [MutationType]
+    public static class {name}Mutation
+    {
+        public static Task<Result> Add{name}(IMediator mediator, Create{name}Command command,
+            CancellationToken cancellationToken = default!)
+            => mediator.Send(command, cancellationToken);
+
+        public static Task<Result> Update{name}(IMediator mediator, Update{name}Command command,
+            CancellationToken cancellationToken = default!)
+            => mediator.Send(command, cancellationToken);
+    }
+}

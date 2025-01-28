@@ -1,0 +1,11 @@
+mutation Create{name}($command: Create{name}CommandInput!){
+  create{name}(command: $command){
+      ...Result
+  }
+}
+
+mutation Update{name}($command: Update{name}CommandInput!){
+    update{name}(command: $command){
+        ...Result
+    }
+}

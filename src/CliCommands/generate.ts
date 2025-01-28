@@ -13,6 +13,9 @@ export function setupGenerateCommand(program: Command) {
     .option("-e, --entity", "Generate entity")
     .option("-c, --controller", "Generate controller")
     .option("-cqrs, --cqrs", "Generate CQRS files")
+    .option("-m, --mapper", "Generate Mapper")
+    .option("-fc, --fluentApiConfiguration", "Generate fluentApi configuration")
+    .option("-gql, --graphql", "Generate graphql files")
     .option("-f, --full", "Generate full files")
     .action(async (options) => {
       await generateFiles(options);

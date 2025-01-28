@@ -1,6 +1,10 @@
 import fs from "fs-extra";
 import path from "path";
-import { CONSTANTS_DOTNET, TemplateTypes } from "./Domain/constants";
+import {
+  CONSTANTS_DOTNET,
+  CONSTANTS_REACT,
+  TemplateTypes,
+} from "./Domain/constants";
 import { capitalizeFirstLetter } from "./utils/String.util";
 
 type TOptions = {
@@ -13,10 +17,13 @@ type TOptions = {
   controller: boolean;
   name: string;
   project: string;
+  mapper: string;
+  fluentApiConfiguration: string;
+  graphql: string;
 };
 
 export const generateFiles = async (options: TOptions) => {
-  const { type, name, project, cqrs, full } = options;
+  const { type, cqrs, full } = options;
 
   // Validação
   validateOptions(options);
@@ -30,6 +37,12 @@ export const generateFiles = async (options: TOptions) => {
     { condition: options.dto, type: TemplateTypes.DTO },
     { condition: options.entity, type: TemplateTypes.ENTITY },
     { condition: options.controller, type: TemplateTypes.CONTROLLER },
+    { condition: options.mapper, type: TemplateTypes.MAPPER },
+    { condition: options.graphql, type: TemplateTypes.GRAPHQL },
+    {
+      condition: options.fluentApiConfiguration,
+      type: TemplateTypes.FLUENTAPI_CONFIGURATION,
+    },
     { condition: cqrs, type: TemplateTypes.CQRS },
   ].filter((generator) => generator.condition);
 
@@ -45,8 +58,8 @@ export const generateFiles = async (options: TOptions) => {
 };
 
 const validateOptions = (options: TOptions) => {
-  const { type, name, project } = options;
-  if (!type || !name || !project) {
+  const { type, name } = options;
+  if (!type || !name) {
     console.error(
       "Error: Missing required options --type, --name, or --project."
     );
@@ -66,6 +79,16 @@ const generateTemplate = async (
     [TemplateTypes.DTO]: CONSTANTS_DOTNET.Default.Dto,
     [TemplateTypes.ENTITY]: CONSTANTS_DOTNET.Default.Entity,
     [TemplateTypes.CONTROLLER]: CONSTANTS_DOTNET.Default.Controller,
+    [TemplateTypes.MAPPER]: CONSTANTS_DOTNET.Default.Mapper,
+
+    [TemplateTypes.FLUENTAPI_CONFIGURATION]:
+      CONSTANTS_DOTNET.Default.FluentApiConfiguration,
+
+    [TemplateTypes.GRAPHQL]:
+      options.type === "react"
+        ? CONSTANTS_REACT.Default.Graphql
+        : CONSTANTS_DOTNET.Default.Graphql,
+
     [TemplateTypes.CQRS]: [
       ...CONSTANTS_DOTNET.Default.Commands,
       ...CONSTANTS_DOTNET.Default.Queries,
@@ -157,10 +180,20 @@ const buildOutputPath = (
   const replacedFileName =
     splitPath
       .at(-1)
-      ?.replace(/\{name\}/g, capitalizeFirstLetter(options.name))
+      ?.replace(
+        /\{name\}/g,
+        options.type === "react" && options.graphql
+          ? options.name
+          : capitalizeFirstLetter(options.name)
+      )
       .replace(/\{project\}/g, options.project)
       .replace(/template/g, "cs") ?? "";
 
-  const filename = capitalizeFirstLetter(replacedFileName);
-  return path.join(outputDir, ...directory, filename);
+  return path.join(
+    outputDir,
+    ...directory,
+    options.type === "react" && options.graphql
+      ? replacedFileName
+      : capitalizeFirstLetter(replacedFileName)
+  );
 };

@@ -1,0 +1,13 @@
+using {project}.API.Graphql.Resolvers;
+using {project}.Domain.Entities;
+
+namespace {project}.API.Graphql.Types;
+
+public class {name}Type : ObjectType<{name}Model>
+{
+    protected override void Configure(IObjectTypeDescriptor<{name}Model> descriptor)
+    {
+        descriptor.Description("Represents any executable command.");
+        descriptor.Field<{name}Resolver>(t => t.GetChildren(default!, default!, default!));
+    }
+}

@@ -1,0 +1,14 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace {project}.Configurations;
+
+public class {name}Configuration : IEntityTypeConfiguration<{name}Model>
+{
+    public void Configure(EntityTypeBuilder<{name}Model> builder)
+    {
+        builder.Property(c => c.Description)
+            .HasMaxLength(200)
+            .IsRequired();
+    }
+}

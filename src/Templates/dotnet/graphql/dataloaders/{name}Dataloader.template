@@ -1,0 +1,19 @@
+using {project}.Domain.Entities;
+using {project}.Domain.Interfaces.Repositories;
+
+namespace {project}.API.Graphql.Dataloaders;
+
+public class {name}DataLoader(
+    I{name}Repository {name}Repository,
+    IBatchScheduler batchScheduler,
+    DataLoaderOptions? options = null)
+    : BatchDataLoader<Guid, {name}Model>(batchScheduler, options)
+{
+    protected override async Task<IReadOnlyDictionary<Guid, {name}Model>> LoadBatchAsync(
+        IReadOnlyList<Guid> keys, 
+        CancellationToken cancellationToken)
+    {
+        var {name} = await {name}Repository.GetByIdsAsync(keys, cancellationToken);
+        return {name}.ToDictionary(c => c.Id);
+    }
+}

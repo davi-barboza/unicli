@@ -1,50 +1,41 @@
 ﻿using AutoMapper;
-using {project}.Dtos;
-using {project}.Commands;
-using {project}.Commands;
-using {project}.Entities;
+using DesapegoSmart.Application.Features.{name}.Commands;
+using DesapegoSmart.Application.ViewModels;
+using DesapegoSmart.Domain.Commands.{name};
+using DesapegoSmart.Domain.Dtos;
+using DesapegoSmart.Domain.Entities;
 
-namespace SampleProject.Application;
+namespace {project}.Mappers;
+
+public class {name}Profile : Profile
+{
+    public {name}Profile()
+    {
+        CreateMap<{name}Model, {name}Dto>();
+        CreateMap<Create{name}Command, {name}Model>();
+        CreateMap<Update{name}Command, {name}Model>();
+    }
+}
 
 public static class {name}Mapper
 {
-    public static {name}Dto ToDto(this {name}Entity input)
+    public static {name}Dto ToDto(this {name}Model input)
     {
-        var config = new MapperConfiguration(cfg =>
-            cfg.CreateMap<{name}, {name}Dto>());
-
-        var mapper = new Mapper(config);
-
-        return mapper.Map<{name}Dto>(input);
+        return MapperConfig.Mapper.Map<{name}Dto>(input);
     }
 
-    public static IReadOnlyList<{name}Dto> ToDto(this IReadOnlyList<{name}Entity> input)
+    public static IReadOnlyList<{name}Dto> ToDto(this IReadOnlyList<{name}Model> input)
     {
-        var config = new MapperConfiguration(cfg =>
-            cfg.CreateMap<{name}Entity, {name}Dto>());
-
-        var mapper = new Mapper(config);
-
-        return mapper.Map<IReadOnlyList<{name}Dto>>(input);
+        return MapperConfig.Mapper.Map<IReadOnlyList<{name}Dto>>(input);
     }
 
-    public static {name} ToEntity(this Create{name}Command input)
+    public static {name}Model ToEntity(this Create{name}Command input)
     {
-        var config = new MapperConfiguration(cfg =>
-            cfg.CreateMap<Create{name}Command, {name}Entity>());
-
-        var mapper = new Mapper(config);
-
-        return mapper.Map<{name}Entity>(input);
+        return MapperConfig.Mapper.Map<{name}Model>(input);
     }
 
-    public static {name} ToEntity(this Update{name}Command input, {name}Entity entity)
+    public static {name}Model ToEntity(this Update{name}Command input, {name}Model entity)
     {
-        var config = new MapperConfiguration(cfg =>
-            cfg.CreateMap<Update{name}Command, {name}Entity>());
-
-        var mapper = new Mapper(config);
-
-        return mapper.Map(input, entity);
+        return MapperConfig.Mapper.Map(input, entity);
     }
 }
