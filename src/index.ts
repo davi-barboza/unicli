@@ -2,6 +2,7 @@
 
 import { Command } from "commander";
 import { setupGenerateCommand } from "./CliCommands/generate";
+import { setupGenerateI18nCommand } from "./CliCommands/generate-i18n";
 
 const program = new Command();
 
@@ -12,5 +13,6 @@ program
 
 // Configura os comandos
 setupGenerateCommand(program);
+setupGenerateI18nCommand(program);
 
 program.parse(process.argv);
