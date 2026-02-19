@@ -3,8 +3,8 @@ import path from "path";
 
 type GenerateI18nOptions = {
   jsonPath: string;
-  prefix?: string;
-  name: string;
+  // prefix?: string;
+  // name: string;
   outPath: string;
 };
 
@@ -133,12 +133,14 @@ function buildFullPathTreeFromModule(
   };
 }
 
-export async function generateI18nFullPathConstants(opts: GenerateI18nOptions) {
-  const absJson = path.isAbsolute(opts.jsonPath)
-    ? opts.jsonPath
-    : path.join(process.cwd(), opts.jsonPath);
+const handleConstants = async (
+  pathAbsolute: string,
+  prefix: string,
+  output: string,
+) => {
+  const name = prefix ? `I18N_${prefix.trim().toUpperCase()}` : "I18N_GLOBAL";
 
-  const raw = await fs.readFile(absJson, "utf-8");
+  const raw = await fs.readFile(pathAbsolute, "utf-8");
   const json = JSON.parse(raw) as JsonObject;
 
   const outObj: any = {};
@@ -150,16 +152,48 @@ export async function generateI18nFullPathConstants(opts: GenerateI18nOptions) {
     outObj[moduleConstKey] = buildFullPathTreeFromModule(
       moduleValue,
       moduleKey,
-      opts.prefix,
+      prefix,
     );
   }
 
-  const content = `export const ${opts.name} = ${tsPrint(outObj, 0)} as const;\n`;
+  const content = `export const ${name} = ${tsPrint(outObj, 0)} as const;\n`;
 
-  const absOut = path.isAbsolute(opts.outPath)
-    ? opts.outPath
-    : path.join(process.cwd(), opts.outPath);
+  const outputWithFileName = prefix
+    ? `${output}/${prefix}.constants.ts`
+    : `${output}/global.constants.ts`;
+
+  const absOut = path.isAbsolute(outputWithFileName)
+    ? outputWithFileName
+    : path.join(process.cwd(), outputWithFileName);
 
   await fs.outputFile(absOut, content, "utf-8");
-  console.log(`I18N FULL-PATH constants generated: ${absOut}`);
+  console.log(`I18N constants generated: ${absOut}`);
+};
+
+export async function generateI18n(opts: GenerateI18nOptions) {
+  const pathAbsolute = path.isAbsolute(opts.jsonPath)
+    ? opts.jsonPath
+    : path.join(process.cwd(), opts.jsonPath);
+
+  // const jsonPathSplit = opts.jsonPath.split("/");
+
+  // if (jsonPathSplit[jsonPathSplit.length - 1].includes(".json")) {
+  //   const prefix = jsonPathSplit[jsonPathSplit.length - 2];
+  //   const output = ;
+
+  //   handleConstants(pathAbsolute, prefix, opts.outPath);
+  // } else {
+  const dirs = await fs.readdir(pathAbsolute, { withFileTypes: true });
+
+  dirs.forEach(async (dir) => {
+    if (dir.name.includes(".json")) {
+      const path = `${pathAbsolute}/${dir.name}`;
+      await handleConstants(path, "", opts.outPath);
+    } else {
+      const path = `${pathAbsolute}/${dir.name}/pt-BR.json`;
+      console.log(path);
+      await handleConstants(path, dir.name, opts.outPath);
+    }
+  });
+  // }
 }
