@@ -1,6 +1,6 @@
 {
   "name": "@davi.barboza/unicli",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "scripts": {
     "build": "tsc",
     "link": "npm run build && npm link",
