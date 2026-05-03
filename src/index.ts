@@ -10,7 +10,7 @@ const program = new Command();
 program
   .name("unicli")
   .description("Universal CLI to generate files")
-  .version("1.0.16");
+  .version("1.0.17");
 
 // Configura os comandos
 setupGenerateCommand(program);
