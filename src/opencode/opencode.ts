@@ -21,6 +21,8 @@ export function setupOpencodeCommand(program: Command) {
       const opencodePath = getOpencodeMountPath();
       const containerConfigPath = "/root/.local/share/opencode";
 
+      const isWindows = os.platform() === "win32";
+
       const result = spawnSync(
         "docker",
         [
@@ -30,7 +32,10 @@ export function setupOpencodeCommand(program: Command) {
           "-w", "/workspace",
           options.image,
         ],
-        { stdio: "inherit" }
+        {
+          stdio: "inherit",
+          shell: isWindows,
+        }
       );
 
       if (result.error) {
