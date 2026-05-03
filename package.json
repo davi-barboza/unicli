@@ -4,7 +4,7 @@
   "scripts": {
     "build": "tsc",
     "link": "npm run build && npm link",
-    "publish": "npm version patch && npm run build && npm publish --access public"
+    "patch-pub": "npm version patch && npm run build && npm publish --access public"
   },
   "bin": {
     "unicli": "./dist/index.js"
