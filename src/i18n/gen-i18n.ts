@@ -88,7 +88,6 @@ function buildFullPathTreeFromModule(
     pathKeys.length ? `${base}.${pathKeys.join(".")}` : base;
 
   const walk = (node: JsonValue, pathKeys: string[]): any => {
-    // qualquer valor primitivo/array vira full path (leaf)
     if (
       typeof node === "string" ||
       typeof node === "number" ||
@@ -100,20 +99,28 @@ function buildFullPathTreeFromModule(
     }
 
     if (isPlainObject(node)) {
-      const out: any = {};
+      const out: any = { prefix: fullPath(pathKeys) };
 
       for (const [rawKey, child] of Object.entries(node)) {
         const nextPath = [...pathKeys, rawKey];
 
-        // enums: se a chave for numérica e estiver abaixo de "enums", nomeia pelo valor
         const isNumericKey = /^\d+$/.test(rawKey);
-        const isEnumBranch = pathKeys.length >= 1 && pathKeys[0] === "enums";
+
+        // "pai é enums" (funciona para global e prefixados):
+        // - global: moduleKey === "enums"
+        // - prefixados: algum ancestral do nó atual é "enums"
+        const parentIsEnums =
+          moduleKey === "enums" || pathKeys.includes("enums");
 
         let constKey: string;
-        if (isEnumBranch && isNumericKey) {
+        if (parentIsEnums && isNumericKey) {
           constKey = normalizeEnumKeyFromValue(child);
         } else {
           constKey = toCamelCase(rawKey);
+        }
+
+        if (Object.prototype.hasOwnProperty.call(out, constKey)) {
+          constKey = `${constKey}_${toCamelCase(rawKey)}`;
         }
 
         out[constKey] = walk(child, nextPath);
@@ -122,15 +129,10 @@ function buildFullPathTreeFromModule(
       return out;
     }
 
-    // fallback
     return fullPath(pathKeys);
   };
 
-  return {
-    // mantém prefix pra compatibilidade com o jeito atual de consumir
-    prefix: base,
-    ...walk(moduleObj, []),
-  };
+  return walk(moduleObj, []);
 }
 
 const handleConstants = async (
@@ -183,25 +185,16 @@ export async function generateI18n(opts: GenerateI18nOptions) {
     ? opts.jsonPath
     : path.join(process.cwd(), opts.jsonPath);
 
-  // const jsonPathSplit = opts.jsonPath.split("/");
-
-  // if (jsonPathSplit[jsonPathSplit.length - 1].includes(".json")) {
-  //   const prefix = jsonPathSplit[jsonPathSplit.length - 2];
-  //   const output = ;
-
-  //   handleConstants(pathAbsolute, prefix, opts.outPath);
-  // } else {
   const dirs = await fs.readdir(pathAbsolute, { withFileTypes: true });
 
-  dirs.forEach(async (dir) => {
+  for (const dir of dirs) {
     if (dir.name.includes(".json")) {
-      const path = `${pathAbsolute}/${dir.name}`;
-      await handleConstants(path, "", opts.outPath);
+      const filePath = `${pathAbsolute}/${dir.name}`;
+      await handleConstants(filePath, "", opts.outPath);
     } else {
-      const path = `${pathAbsolute}/${dir.name}/pt-BR.json`;
-      console.log(path);
-      await handleConstants(path, dir.name, opts.outPath);
+      const filePath = `${pathAbsolute}/${dir.name}/pt-BR.json`;
+      console.log(filePath);
+      await handleConstants(filePath, dir.name, opts.outPath);
     }
-  });
-  // }
+  }
 }
